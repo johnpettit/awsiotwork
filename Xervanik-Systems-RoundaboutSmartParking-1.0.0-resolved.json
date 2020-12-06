@@ -1,0 +1,138 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/Xervanik-Systems/RoundaboutSmartParking/1.0.0
+info:
+  version: "1.0.0"
+  title: parking-iot-api
+  description: The API for the Roundabout Parking Project
+paths:
+  /meters:
+    get:
+      tags:
+        - Meter
+      description: Returns all Meters
+      operationId: getAllMeters
+      responses:
+        '200':
+          description: All meters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meter'
+  /meters/{meterID}:
+    get:
+      tags:
+        - Meter
+      description: Returns a registered Meter
+      operationId: getMeter
+      parameters:
+        - in: path
+          name: meterID
+          description: ID of Meter
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: A meter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meter'
+  /meters/{meterID}/data:
+    get:
+      tags:
+        - Meter
+      description: Returns Meter data
+      operationId: getMeterData
+      parameters:
+        - in: path
+          name: meterID
+          description: ID of Meter
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: A meters data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MeterData'
+  /meters/closest:
+    get:
+      tags:
+        - Meter
+      description: Returns closest available Meter
+      operationId: getClosestMeter
+      parameters:
+        - in: query
+          name: latitude
+          description: Latitude
+          required: true
+          schema:
+            type: number
+            format: double
+        - in: query
+          name: longitude
+          description: Longitude
+          required: true
+          schema:
+            type: number
+            format: double
+      responses:
+        '200':
+          description: A meter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meter'
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+          example: everything is ok
+    MeterData:
+      type: object
+      properties:
+        meterId:
+          type: integer
+          format: double
+        timestamp:
+          type: string
+          format: date
+        isoccupied:
+          type: boolean
+    Meter:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: double
+        isoccupied:
+          type: boolean
+          default: false
+        address:
+          type: string
+        latitude:
+          type: number
+          format: double
+        lonongitude:
+          type: number
+          format: double
+        number:
+          type: integer
